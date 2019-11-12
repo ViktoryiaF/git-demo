@@ -19,15 +19,13 @@ namespace Tests
         //3. Заполнить в форме поиска поле "Дата" - указать дату отправления(послезавтра)
         //4. Нажать кнопку "найти" в форме поиска
 
-
+        static DateTime currentDate = DateTime.Now;
+        public string dayAfterTomorrowDate = (currentDate.AddDays(2)).Day.ToString(); 
+        private static string monthOfDayAfterTomorrow = (currentDate.AddMonths(-1)).Month.ToString();
 
         [Test]
         public void SearchWithoutEnteringTheCityOfArrival()
         {
-
-            var currentDate = DateTime.Now;
-            var dayAfterTomorrowDate = (currentDate.AddDays(2)).Day.ToString();
-            var monthOfDayAfterTomorrow = (currentDate.AddMonths(-1)).Month.ToString();
 
             var departureDate = GetWebElementByClassName("ui-datepicker-trigger");
             departureDate.Click();
@@ -69,10 +67,6 @@ namespace Tests
             const string arrivalCityText = "Москва" ;
 
             #endregion
-
-            var currentDate = DateTime.Now;
-            var dayAfterTomorrowDate = (currentDate.AddDays(2)).Day.ToString();
-            var monthOfDayAfterTomorrow = (currentDate.AddMonths(-1)).Month.ToString();
 
             var arrivalCity = GetWebElementById("to_name");
             arrivalCity.SendKeys(arrivalCityText);
