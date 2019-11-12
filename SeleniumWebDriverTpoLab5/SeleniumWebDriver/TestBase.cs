@@ -14,9 +14,9 @@ namespace SeleniumWebDriver
         public void OpenBrouserAndGoToTheTestSite()
         {
             
-            webDriver = new ChromeDriver("C:\\Users\\Acer\\source\\repos\\SeleniumWebDriverTpoLab5\\SeleniumWebDriver\\bin\\Debug\\netcoreapp2.1\\");
+            webDriver = new ChromeDriver();
             webDriver.Manage().Window.Maximize();
-            webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(60);
+            webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(180);
             webDriver.Navigate().GoToUrl("https://tickets.by/gd");
         }
 
@@ -38,5 +38,6 @@ namespace SeleniumWebDriver
         {
             return webDriver.FindElement(By.XPath(xPath));
         }
+
     }
 }

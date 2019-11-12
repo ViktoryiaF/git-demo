@@ -8,9 +8,9 @@ namespace Tests
     public class Tests:TestBase
     {
         private const string ErrorTextForEmptyString =
-            "Это поле необходимо заполнить.";
+            "Это поле необходимо заполнить";
+        private const string message = "Время выезда/приезда: местное";
 
-       
         //        Тест 1: найти поезда из минска на послезавтра без указания точки прибытия
 
         //Шаги : 
@@ -19,28 +19,27 @@ namespace Tests
         //3. Заполнить в форме поиска поле "Дата" - указать дату отправления(послезавтра)
         //4. Нажать кнопку "найти" в форме поиска
 
+
+
         [Test]
         public void SearchWithoutEnteringTheCityOfArrival()
         {
-            #region TestData
 
-            const string departureCityText = "Минск";
+            var currentDate = DateTime.Now;
+            var dayAfterTomorrowDate = (currentDate.AddDays(2)).Day.ToString();
+            var monthOfDayAfterTomorrow = (currentDate.AddMonths(-1)).Month.ToString();
 
-
-            #endregion
-
-            var departureCity = GetWebElementById("from_name_as");
-            departureCity.SendKeys(departureCityText);
-            var departureDate = GetWebElementById("departure_date");
+            var departureDate = GetWebElementByClassName("ui-datepicker-trigger");
             departureDate.Click();
-            var departureDateChoose = GetWebElementByClassName("ui-datepicker-week-end.day_td.date_1572037200000");
+            var departureDateChoose = GetWebElementByXPath("//td[@data-month=" + monthOfDayAfterTomorrow + "]/descendant-or-self::a[text() = " + dayAfterTomorrowDate + "]");
             departureDateChoose.Click();
-            var searchButton = GetWebElementByClassName("search__form-button.button");
+            var searchButton = GetWebElementByXPath("//input[@value='Найти']");
             searchButton.Click();
-            var errorMessage = GetWebElementByXPath("//li[@class = 'error']");
+            var errorMessage = GetWebElementByXPath("//samp[@class = 'error']");
             string error = errorMessage.Text;
             Assert.AreEqual(ErrorTextForEmptyString, error);
         }
+
 
 
 
@@ -67,24 +66,28 @@ namespace Tests
         {
             #region TestData
 
-            const string departureCityText = "Минск";
             const string arrivalCityText = "Москва" ;
 
-           
             #endregion
 
-            var departureCity = GetWebElementById("from_name_as");
-            departureCity.SendKeys(departureCityText);
+            var currentDate = DateTime.Now;
+            var dayAfterTomorrowDate = (currentDate.AddDays(2)).Day.ToString();
+            var monthOfDayAfterTomorrow = (currentDate.AddMonths(-1)).Month.ToString();
+
             var arrivalCity = GetWebElementById("to_name");
             arrivalCity.SendKeys(arrivalCityText);
-            var departureDate = GetWebElementById("departure_date");
+            var chooseArrivalCity = GetWebElementByXPath("//strong[text() ='Москва']");
+            chooseArrivalCity.Click();
+            var departureDate = GetWebElementByClassName("ui-datepicker-trigger");
             departureDate.Click();
-            var departureDateChoose = GetWebElementByClassName("ui-datepicker-week-end.day_td.date_1572037200000");
+            var departureDateChoose = GetWebElementByXPath("//td[@data-month=" + monthOfDayAfterTomorrow + "]/descendant-or-self::a[text() = " + dayAfterTomorrowDate + "]");
             departureDateChoose.Click();
-            var searchButton = GetWebElementByClassName("search__form-button.button");
+            var searchButton = GetWebElementByXPath("//input[@value='Найти']");
             searchButton.Click();
+           var resultOfSearchWithAllFieldsAreFull = GetWebElementByXPath("//p[text()='Время выезда/приезда: местное']");
+           Assert.AreEqual(resultOfSearchWithAllFieldsAreFull.Text, message);
         }
 
-       
+
     }
 }
