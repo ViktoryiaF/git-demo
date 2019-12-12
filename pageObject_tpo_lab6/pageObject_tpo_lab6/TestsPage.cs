@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using pageObject_tpo_lab6.PageObjects;
+using OpenQA.Selenium.Support.PageObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,28 +22,36 @@ namespace pageObject_tpo_lab6
             driver.Manage().Window.Maximize();
         }
 
+        const string ErrorTextForSearchWithAllFieldsAreFullResult =
+            "Время выезда/приезда: местное";
+
+        const string ErrorTextForSearchWithoutEnteringTheCityOfArrival =
+            "Это поле необходимо заполнить";
+
+        const string StartPage = "https://tickets.by/gd";
+
         [Test]
         public void SearchWithAllFieldsAreFull()
         {
-            PageForBookingTrainTickets home = new PageForBookingTrainTickets(driver);
-            PageWhithSerchingResults search = new PageWhithSerchingResults(driver);
-            home.goToPage();
-            PageForBookingTrainTickets inputArrivalCity = home.InputArrivalCity("Москва");
-            PageForBookingTrainTickets inputDepartureDate = home.InputDepartureDate();
-            PageWhithSerchingResults goToPageWhithSerchingResultsPage = home.GoToPageWhithSerchingResultsPage();
-            PageWhithSerchingResults serchingResults = search.Search();
-            Assert.AreEqual("Время выезда/приезда: местное", search.resultOfSearchWithAllFieldsAreFull.Text);
+            BookingTrainTicketsPage home = new BookingTrainTicketsPage(driver)
+                .GoToPage(StartPage)
+                .InputArrivalCity()
+                .InputDepartureDate()
+                .GoToPageWhithSerchingResultsPage();
+            SearchingTrainResultsPage search = new SearchingTrainResultsPage(driver)
+                .Search();
+            Assert.AreEqual(ErrorTextForSearchWithAllFieldsAreFullResult, search.SearchWithAllFieldsAreFullResult.Text);
 
         }
 
         [Test]
         public void SearchWithoutEnteringTheCityOfArrival()
         {
-            PageForBookingTrainTickets home = new PageForBookingTrainTickets(driver);
-            home.goToPage();
-            PageForBookingTrainTickets inputDepartureDate = home.InputDepartureDate();
-            PageForBookingTrainTickets startSearching = home.NoInputArrivalCity();
-            Assert.AreEqual("Это поле необходимо заполнить", home.errorMessage.Text);
+            BookingTrainTicketsPage home = new BookingTrainTicketsPage(driver)
+                .GoToPage(StartPage)
+                .InputDepartureDate()
+                .NoInputArrivalCity();
+            Assert.AreEqual(ErrorTextForSearchWithoutEnteringTheCityOfArrival, home.errorMessage.Text);
 
         }
 
