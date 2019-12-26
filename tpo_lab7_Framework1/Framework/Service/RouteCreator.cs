@@ -9,7 +9,7 @@ namespace Framework.Service
 {
     public class RouteCreator
     {
-        public Route WithAllProperties()
+        public static Route WithAllProperties()
         {
             return new Route(TestDataReader.GetData("ArrivalCity"));
         }

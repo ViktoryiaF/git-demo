@@ -5,7 +5,6 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.Extensions;
 using Framework.PageObject;
-using Framework.Driver;
 using NUnit.Framework.Interfaces;
 
 
@@ -14,6 +13,7 @@ namespace Framework.Test
     public class CommonConditions: TestListener
     {
         protected IWebDriver Driver;
+     //   const string StartPage = "https://tickets.by/gd";
 
         [SetUp]
         public void OpenBrowser()
