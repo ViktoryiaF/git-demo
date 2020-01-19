@@ -100,12 +100,15 @@
     <Compile Include="Driver\DriverSingleton.cs" />
     <Compile Include="Models\Errors.cs" />
     <Compile Include="Models\Route.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="PageObject\BookingTrainTicketsPage.cs" />
     <Compile Include="PageObject\SearchingTrainResultsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\ErrorsCreator.cs" />
     <Compile Include="Service\RouteCreator.cs" />
     <Compile Include="Service\TestDataReader.cs" />
+    <Compile Include="Service\UserCreator.cs" />
+    <Compile Include="Service\Waiter.cs" />
     <Compile Include="TestListener.cs" />
     <Compile Include="Test\CommonConditions.cs" />
     <Compile Include="Test\Tests.cs" />

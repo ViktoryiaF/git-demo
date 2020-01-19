@@ -20,7 +20,10 @@ namespace Framework.Test
         const string ErrorTextForSearchWithoutEnteringTheCityOfArrival =
             "Это поле необходимо заполнить";
         const string ErrorTextForCantChooseOneSeatsForOnePasengerWithChilds =
-          "Выбрано недостаточное колличество мест";
+          "Выбрано недостаточное количество мест";
+        const string ErrorTextForNotEnterPasengerData =
+          "Укажите пол пассажира";
+        //Укажите пол пассажира
         const string MinAdultsValue = "1";
         const string MaxAdultsValue = "4";
         const string DayBeforeTodayValue = "20";
@@ -46,6 +49,7 @@ namespace Framework.Test
         {
             BookingTrainTicketsPage home = new BookingTrainTicketsPage(Driver)
                 .GoToPage(StartPage)
+                .InputDepartureDateWithoutCountry()
                 .InputDepartureDate()
                 .NoInputArrivalCity();
             Assert.AreEqual(ErrorTextForSearchWithoutEnteringTheCityOfArrival, home.errorMessage.Text);
@@ -60,8 +64,7 @@ namespace Framework.Test
             BookingTrainTicketsPage home = new BookingTrainTicketsPage(Driver)
                 .GoToPage(StartPage)
                 .InputArrivalCity(route);
-            Assert.IsTrue(home.IsPrevDataClickable());
-
+            Assert.IsFalse(home.IsPrevDataClickable());
         }
 
 
@@ -78,8 +81,7 @@ namespace Framework.Test
                 .ChooseTrainClick()
                  .ChildPlusClick()
                 .AdultMinusClick();
-
-            Assert.AreEqual(MinAdultsValue, search.MinAdults.Text);
+            Assert.IsTrue(search.check());
 
         }
 
@@ -95,8 +97,7 @@ namespace Framework.Test
                 .Search()
                 .ChooseTrainClick()
                 .AdultPlusClick(6);
-
-            Assert.AreNotEqual(MaxAdultsValue, search.MinAdults.Text);
+            Assert.AreEqual(MaxAdultsValue, search.PassangersNumber[0].GetAttribute("value"));
         }
 
 
@@ -112,10 +113,8 @@ namespace Framework.Test
                 .GoToSearchingTrainResultsPage()
                 .Search()
                 .ChooseTrainClick()
-                .AdultPlusClick(1)
                 .PlaceToSitClick(2);
-
-            Assert.AreEqual( errorMessage, search.errorToolTip.Text);
+            Assert.AreEqual(errorMessage.ErrorMessage, search.errorToolTip.Text);
         }
 
         [Test]
@@ -130,18 +129,17 @@ namespace Framework.Test
                 .GoToSearchingTrainResultsPage()
                 .Search()
                 .ChooseTrainClick()
-                .AdultPlusClick(1)
-                .ChildPlusClick()
+                .ChildTillFivePlusClick()
                 .PlaceToSitClick(2);
 
-            Assert.AreEqual(errorMessage, search.errorToolTip.Text);
+            Assert.AreEqual(errorMessage.ErrorMessage, search.errorToolTip.Text);
         }
 
         [Test]
         public void CantChooseOneSeatsForOnePasengerWithChilds()
         {
             var route = RouteCreator.WithAllProperties();
-            
+
             SearchingTrainResultsPage search = new BookingTrainTicketsPage(Driver)
                 .GoToPage(StartPage)
                 .InputArrivalCity(route)
@@ -149,12 +147,45 @@ namespace Framework.Test
                 .GoToSearchingTrainResultsPage()
                 .Search()
                 .ChooseTrainClick()
-                .AdultPlusClick(1)
                 .ChildPlusClick()
                 .PlaceToSitClick(1)
                 .EnterPassangerInfoClick();
 
-            Assert.AreEqual(ErrorTextForCantChooseOneSeatsForOnePasengerWithChilds, search.errorToolTip.Text);
+            Assert.AreEqual(ErrorTextForCantChooseOneSeatsForOnePasengerWithChilds, search.ErrorPopup.Text);
+        }
+
+        [Test]
+        public void NotEnterPasengerData()
+        {
+            var route = RouteCreator.WithAllProperties();
+
+            SearchingTrainResultsPage search = new BookingTrainTicketsPage(Driver)
+                .GoToPage(StartPage)
+                .InputArrivalCity(route)
+                .InputDepartureDate()
+                .GoToSearchingTrainResultsPage()
+                .Search()
+                .ChooseTrainClick()
+                .PlaceToSitClick(1)
+                .EnterPassangerInfoClick()
+                .BuyButtonClick();
+
+            Assert.AreEqual(ErrorTextForNotEnterPasengerData, search.ErrorField[0].Text);
+        }
+
+        [Test]
+        public void IsUserExists()
+        {
+            var user = UserCreator.WithAllProperties();
+
+            BookingTrainTicketsPage register = new BookingTrainTicketsPage(Driver)
+                .GoToPage(StartPage)
+                .Login()
+                .Register()
+                .InputUserData(user)
+                .SubmitReg();
+
+            Assert.IsTrue(register.IsUserExists());
         }
     }
 }

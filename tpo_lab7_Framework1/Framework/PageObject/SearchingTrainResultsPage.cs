@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Framework.Service;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium.Support.UI;
 using System;
@@ -26,24 +27,42 @@ namespace Framework.Tests
 
         [FindsBy(How = How.ClassName, Using = "choose")]
         public IWebElement ChooseTrain { get; set; }
-        [FindsBy(How = How.XPath, Using = "a//[@data-increment='plus'][2]")]
-        public IWebElement ChildPlus { get; set; }
-        [FindsBy(How = How.XPath, Using = "a//[@data-increment='minus'][1]")]
-        public IWebElement AdultMinus { get; set; }
-        [FindsBy(How = How.XPath, Using = "a//[@data-increment='plus'][1]")]
-        public IWebElement AdultPlus { get; set; }
-        [FindsBy(How = How.XPath, Using = "//input[@class = 'add-group__item add-group__item--input'][0]")]
-        public IWebElement MinAdults { get; set; }
-        [FindsBy(How = How.XPath, Using = "a//[@class='one-seat one_sit top tr'][1]")]
-        public IWebElement FirstPlaceToSit { get; set; }
-        [FindsBy(How = How.XPath, Using = "a//[@class='one-seat one_sit top tr'][2]")]
-        public IWebElement SecondPlaceToSit { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//a[@data-increment='plus']")]
+        public IList<IWebElement> PlusButtons { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//a[@data-increment='minus']")]
+        public IList<IWebElement> MinusButtons { get; set; }
+
+        [FindsBy(How = How.ClassName, Using = "add-group__item--input")]
+        public IList<IWebElement> PassangersNumber { get; set; }
+
+        [FindsBy(How = How.ClassName, Using = "one_sit")]
+        public IList<IWebElement> PlacesToSit { get; set; }
 
         [FindsBy(How = How.ClassName, Using = "ui-tooltip-content")]
         public IWebElement errorToolTip { get; set; }
 
-        [FindsBy(How = How.ClassName, Using = "button js-prebook-btn")]
-        public IWebElement EnterPassengerInfo { get; set; }
+        [FindsBy(How = How.ClassName, Using = "js-prebook-btn")]
+        public IList<IWebElement> EnterPassengerInfo { get; set; }
+
+        [FindsBy(How = How.ClassName, Using = "preloader_light")]
+        public IWebElement Preloader { get; set; }
+
+        [FindsBy(How = How.ClassName, Using = "popup-info__text")]
+        public IWebElement ErrorPopup { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//input[@value='Продолжить']")]
+        public IWebElement BuyButton { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//samp[@class='error']")]
+        public IList<IWebElement> ErrorField { get; set; }
+
+        [FindsBy(How = How.ClassName, Using = "iCheck-helper")]
+        public IList<IWebElement> SexRadioButtons { get; set; }
+
+
+        //iCheck-helper
 
 
         public SearchingTrainResultsPage Search()
@@ -54,19 +73,36 @@ namespace Framework.Tests
 
         public SearchingTrainResultsPage ChooseTrainClick()
         {
+            Waiter.WaitForAjax(driver);
             ChooseTrain.Click();
+            return this;
+        }
+
+        public SearchingTrainResultsPage ChildTillFivePlusClick()
+        {
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+                .Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
+            Waiter.WaitForAjax(driver);
+            PlusButtons[2].Click();
             return this;
         }
 
         public SearchingTrainResultsPage ChildPlusClick()
         {
-            ChildPlus.Click();
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+                .Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
+            Waiter.WaitForAjax(driver);
+            PlusButtons[1].Click();
             return this;
         }
 
         public SearchingTrainResultsPage AdultMinusClick()
         {
-            AdultMinus.Click();
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+            .Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
+            Waiter.WaitForAjax(driver);
+
+            MinusButtons[0].Click();
             return this;
         }
 
@@ -74,32 +110,57 @@ namespace Framework.Tests
         {
             for (int i = 0; i < n; i++)
             {
-                AdultPlus.Click();
+                new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+               .Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
+                Waiter.WaitForAjax(driver);
+                PlusButtons[0].Click();
             }
             return this;
         }
-
+        public bool check()
+        {
+            var value = PassangersNumber.First();
+            var compareResult = value.GetAttribute("value") == "1";
+            return compareResult;
+        }
         public SearchingTrainResultsPage PlaceToSitClick(int numberOfSits)
         {
-            if (numberOfSits == 1)
+            for (int i = 0; i < numberOfSits; i++)
             {
-                FirstPlaceToSit.Click();
+                foreach (var sit in PlacesToSit)
+                {
+                    if (!sit.GetAttribute("class").Contains("occupied") && !sit.GetAttribute("class").Contains("checked"))
+                    {
+                        new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+                            .Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
+                        Waiter.WaitForAjax(driver);
+                        sit.Click();
+                        break;
+                    }
+                }
             }
-            else
-            {
-                FirstPlaceToSit.Click();
-                SecondPlaceToSit.Click();
-            }
-
-
             return this;
         }
 
         public SearchingTrainResultsPage EnterPassangerInfoClick()
         {
-            EnterPassengerInfo.Click();
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+              .Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
+            Waiter.WaitForAjax(driver);
+            EnterPassengerInfo[1].Click();
             return this;
         }
 
+        public SearchingTrainResultsPage BuyButtonClick()
+        {
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+            .Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
+            Waiter.WaitForAjax(driver);
+
+            BuyButton.Click();
+            return this;
+        }
+
+       
     }
 }

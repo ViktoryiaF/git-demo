@@ -35,7 +35,7 @@ namespace pageObject_tpo_lab6
         {
             BookingTrainTicketsPage home = new BookingTrainTicketsPage(driver)
                 .GoToPage(StartPage)
-                .InputArrivalCity()
+                .InputArrivalCity("Москва")
                 .InputDepartureDate()
                 .GoToPageWhithSerchingResultsPage();
             SearchingTrainResultsPage search = new SearchingTrainResultsPage(driver)

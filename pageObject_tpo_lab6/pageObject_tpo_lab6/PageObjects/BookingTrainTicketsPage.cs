@@ -45,9 +45,10 @@ namespace pageObject_tpo_lab6.PageObjects
         }
 
 
-        public void GoToPage(string pageURL)
+        public BookingTrainTicketsPage GoToPage(string pageURL)
         {
             driver.Navigate().GoToUrl(pageURL);
+            return this;
         }
 
         public SearchingTrainResultsPage GoToSearchingTrainResultsPage()
