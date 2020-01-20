@@ -23,7 +23,7 @@ namespace Framework.Test
           "Выбрано недостаточное количество мест";
         const string ErrorTextForNotEnterPasengerData =
           "Укажите пол пассажира";
-        //Укажите пол пассажира
+
         const string MinAdultsValue = "1";
         const string MaxAdultsValue = "4";
         const string DayBeforeTodayValue = "20";
