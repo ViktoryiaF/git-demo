@@ -1,8 +1,2 @@
-*.db
-*.log
-**/target
-**/bin
-*.orig
 **/.vs
-**/packages
-**/obj**/.gitignore
+**/.gitignore

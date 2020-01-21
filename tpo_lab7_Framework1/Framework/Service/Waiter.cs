@@ -12,7 +12,7 @@ namespace Framework.Service
     {
         public static void WaitForAjax(IWebDriver driver)
         {
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
             wait.Until(d => (bool)(d as IJavaScriptExecutor).ExecuteScript("return jQuery.active == 0"));
         }
     }

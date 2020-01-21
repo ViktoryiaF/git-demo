@@ -26,8 +26,6 @@ namespace Framework.Test
 
         const string MinAdultsValue = "1";
         const string MaxAdultsValue = "4";
-        const string DayBeforeTodayValue = "20";
-
 
         const string StartPage = "https://tickets.by/gd";
 

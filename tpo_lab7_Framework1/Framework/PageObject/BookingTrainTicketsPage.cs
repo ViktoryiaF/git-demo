@@ -19,15 +19,6 @@ namespace Framework.PageObject
         static DateTime futureDate = currentDate.AddDays(2);
 
 
-
-        //
-        //id = first_name
-        //id = last_name
-        //iid = email_register
-        //id = pass_register
-        //id = phone_number_register
-        //
-
         [FindsBy(How = How.XPath, Using = "//a[@data-action='link-header_login']")]
         private IWebElement LoginButton { get; set; }
       

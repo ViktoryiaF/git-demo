@@ -18,7 +18,7 @@ namespace Framework.Tests
         public SearchingTrainResultsPage(IWebDriver driver)
         {
             this.driver = driver;
-            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
             PageFactory.InitElements(driver, this);
         }
 
@@ -62,8 +62,6 @@ namespace Framework.Tests
         public IList<IWebElement> SexRadioButtons { get; set; }
 
 
-        //iCheck-helper
-
 
         public SearchingTrainResultsPage Search()
         {
@@ -80,8 +78,7 @@ namespace Framework.Tests
 
         public SearchingTrainResultsPage ChildTillFivePlusClick()
         {
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
-                .Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
+            wait.Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
             Waiter.WaitForAjax(driver);
             PlusButtons[2].Click();
             return this;
@@ -89,8 +86,7 @@ namespace Framework.Tests
 
         public SearchingTrainResultsPage ChildPlusClick()
         {
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
-                .Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
+            wait.Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
             Waiter.WaitForAjax(driver);
             PlusButtons[1].Click();
             return this;
@@ -98,10 +94,8 @@ namespace Framework.Tests
 
         public SearchingTrainResultsPage AdultMinusClick()
         {
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
-            .Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
+            wait.Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
             Waiter.WaitForAjax(driver);
-
             MinusButtons[0].Click();
             return this;
         }
@@ -110,8 +104,7 @@ namespace Framework.Tests
         {
             for (int i = 0; i < n; i++)
             {
-                new WebDriverWait(driver, TimeSpan.FromSeconds(10))
-               .Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
+                wait.Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
                 Waiter.WaitForAjax(driver);
                 PlusButtons[0].Click();
             }
@@ -131,8 +124,7 @@ namespace Framework.Tests
                 {
                     if (!sit.GetAttribute("class").Contains("occupied") && !sit.GetAttribute("class").Contains("checked"))
                     {
-                        new WebDriverWait(driver, TimeSpan.FromSeconds(10))
-                            .Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
+                        wait.Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
                         Waiter.WaitForAjax(driver);
                         sit.Click();
                         break;
@@ -144,8 +136,7 @@ namespace Framework.Tests
 
         public SearchingTrainResultsPage EnterPassangerInfoClick()
         {
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
-              .Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
+            wait.Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
             Waiter.WaitForAjax(driver);
             EnterPassengerInfo[1].Click();
             return this;
@@ -153,10 +144,8 @@ namespace Framework.Tests
 
         public SearchingTrainResultsPage BuyButtonClick()
         {
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
-            .Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
+            wait.Until(e => e.FindElement(By.ClassName("preloader_light")).GetAttribute("style") == "display: none;");
             Waiter.WaitForAjax(driver);
-
             BuyButton.Click();
             return this;
         }
